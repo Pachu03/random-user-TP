@@ -41,16 +41,16 @@ export class Person {
   set surname(value) {
     this.#surname = value;
   }
-  set email(value) {
+  set _email(value) {
     this.email = value;
   }
-  set phone(value) {
+  set _phone(value) {
     this.phone = value;
   }
-  set picture(value) {
+  set _picture(value) {
     this.picture = value;
   }
-  set location(value) {
+  set _location(value) {
     this.location = value;
   }
 }

@@ -2,6 +2,8 @@ import "./style.css";
 import { url_random_user, url_worl_time, options_worl_time } from "./api";
 import { Person } from "./Person";
 import { createStructureDom } from "./helper/domHelper";
+import { getUser } from "./helper/promiseHelper";
+
 const divContainer = document.querySelector(".container");
 
 const textPerson = ["Name:", "Mail:", "Phone:", "Location:", "Current Time:"];
@@ -27,12 +29,12 @@ const createElements = (urlImg, textPerson, nameSecondaryPerson) => {
   btn.addEventListener("click", generateUser);
 
   divContainer.append(
-      createStructureDom(urlImg, textPerson, nameSecondaryPerson),
+    createStructureDom(urlImg, textPerson, nameSecondaryPerson),
     btn
   );
 };
 
-const generateUser = async () => {
+let generateUser = async () => {
   try {
     const response = await fetch(url_random_user);
     const data = await response.json();
@@ -40,19 +42,17 @@ const generateUser = async () => {
     const response2 = await fetch(url_worl_time, options_worl_time);
     const data2 = await response2.json();
 
-    const user = data.results[0];
-
-    const person = new Person(user.name.last, user.name.first);
+    let person2 = await getUser(data.results[0]);
 
     const dataperson = [
-      " " + person.surname + " " + person.name,
-      " " + user.email,
-      " " + user.phone,
-      " " + user.location.city,
+      " " + person2.surname + " " + person2.name,
+      " " + person2.email,
+      " " + person2.phone,
+      " " + person2.location,
       " " + data2.datetime,
     ];
 
-    createElements(user.picture.large, textPerson, dataperson);
+    createElements(person2.picture, textPerson, dataperson);
   } catch (error) {
     console.error(error);
   }
