@@ -1,10 +1,8 @@
 import "./style.css";
 import { url_random_user, url_worl_time, options_worl_time } from "./api";
 import { Person } from "./Person";
+import { createStructureDom } from "./helper/domHelper";
 const divContainer = document.querySelector(".container");
-
-const divCard = document.createElement("div");
-divCard.className = "card";
 
 const textPerson = ["Name:", "Mail:", "Phone:", "Location:", "Current Time:"];
 
@@ -20,33 +18,18 @@ const nameBtn = "GENERATE USER";
 
 const urlImg = "./public/user_nt_found.jpg";
 
-const createElements = (urlImg, nameSecondaryPerson) => {
-  divContainer.textContent=" ";
-  divCard.innerHTML = " ";
-  
-  const img = document.createElement("img");
-  img.src = urlImg;
-
-  divCard.append(img);
-
-  let counter = 0;
-  textPerson.forEach((person) => {
-    const span = document.createElement("span");
-
-    const strong = document.createElement("strong");
-    strong.textContent = person;
-
-    span.append(strong, nameSecondaryPerson[counter]);
-    divCard.append(span);
-    counter++;
-  });
+const createElements = (urlImg, textPerson, nameSecondaryPerson) => {
+  divContainer.textContent = " ";
 
   const btn = document.createElement("button");
   btn.textContent = nameBtn;
 
   btn.addEventListener("click", generateUser);
 
-  divContainer.append(divCard, btn);
+  divContainer.append(
+      createStructureDom(urlImg, textPerson, nameSecondaryPerson),
+    btn
+  );
 };
 
 const generateUser = async () => {
@@ -69,10 +52,10 @@ const generateUser = async () => {
       " " + data2.datetime,
     ];
 
-    createElements(user.picture.large, dataperson);
+    createElements(user.picture.large, textPerson, dataperson);
   } catch (error) {
     console.error(error);
   }
 };
 
-createElements(urlImg, nameSecondaryPerson);
+createElements(urlImg, textPerson, nameSecondaryPerson);
